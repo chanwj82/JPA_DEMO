@@ -8,7 +8,6 @@ import java.util.List;
 
 import javax.persistence.QueryHint;
 
-//import org.hibernate.jpa.QueryHints;
 import com.demo.jpa.core.SpringApplicationContext;
 import com.demo.jpa.entity.CompanyBaseEntity;
 import com.demo.jpa.model.CompanyModel;
