@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ComapnyController {
+public class CompanyController {
 	
-	private static Logger log = LoggerFactory.getLogger(ComapnyController.class);
+	private static Logger log = LoggerFactory.getLogger(CompanyController.class);
 	
 	@Autowired
 	private MemberService memberService;

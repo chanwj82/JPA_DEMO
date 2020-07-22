@@ -5,6 +5,7 @@ import com.demo.jpa.core.SpringApplicationContext;
 import com.demo.jpa.entity.CompanyBaseEntity;
 import com.demo.jpa.entity.CompanySetInfoEntity;
 import com.demo.jpa.entity.MemberEntity;
+import com.demo.jpa.model.CompanyModel;
 import com.demo.jpa.model.MemberModel;
 import com.demo.jpa.repository.CompanyRepository;
 import com.demo.jpa.repository.CompanySetInfRepository;
@@ -124,8 +125,8 @@ class JpaDemoApplicationTests {
 		JPAQueryFactory queryFactory = (JPAQueryFactory) SpringApplicationContext.getBean("queryFactory");
 
 		PageRequest pageRequest = new PageRequest();
-		pageRequest.setSize(2);
-		pageRequest.setPage(1);
+		pageRequest.setSize(5);
+		pageRequest.setPage(2);
 
 		QueryResults<MemberModel> resultList = queryFactory
 				.select(
@@ -151,5 +152,31 @@ class JpaDemoApplicationTests {
 
 		resultList.getResults().forEach(member -> log.info("{}",member));
 
+	}
+
+	@Test
+	public void getCompanyBas(){
+
+		CompanyBaseEntity companyBaseEntity = companyRepository.findOneByCmpyNo("J01");
+		
+		Assert.assertTrue(companyBaseEntity.getCmpyNm().equals("차세대테스트"));
+
+		log.info("companyBaseEntity [{}] CompanySetInfo [{}]", companyBaseEntity, companyBaseEntity.getCompanySetInfo());
+
+		CompanyModel companyBase = companyRepository.getCompany("100");
+
+		log.info("companyBase [{}]", companyBase);
+
+		Assert.assertTrue(companyBase.getCmpyNm().equals("이제너두"));
+	}
+
+	@Test
+	public void getCompanySetInf(){
+
+		CompanySetInfoEntity companySetInfoEntity = companySetInfRepository.findByCmpyNo("J01");
+
+		log.info("companySetInfoEntity [{}] Company [{}]", companySetInfoEntity, companySetInfoEntity.getCompany());
+
+		Assert.assertTrue(companySetInfoEntity.getCmpyNo().equals("J01"));
 	}
 }

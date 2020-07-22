@@ -20,6 +20,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.PageImpl;
 
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.QueryHints;
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.querydsl.core.types.Projections;
@@ -29,6 +30,7 @@ public interface CompanyRepository extends JpaRepository<CompanyBaseEntity, Stri
 
 	public static Logger log = LoggerFactory.getLogger(CompanyRepository.class);
 
+	@EntityGraph(attributePaths = "companySetInfo")
 	@QueryHints({ @QueryHint(name = org.hibernate.jpa.QueryHints.HINT_COMMENT, value = "CompanyRepository.findOneByCmpyNo") })
 	public CompanyBaseEntity findOneByCmpyNo(String cmpyNo);
 
