@@ -32,6 +32,7 @@ import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 import static com.demo.jpa.entity.QCompanyBaseEntity.companyBaseEntity;
 import static com.demo.jpa.entity.QCompanySetInfoEntity.companySetInfoEntity;
@@ -88,8 +89,8 @@ class JpaDemoApplicationTests {
 
 	@Test
 	public void getCmpyAllMembers(){
-		List<MemberModel> memberList = companyRepository.getCompanyAllMembers("100");
-		memberList.forEach(mbmber -> log.info("[{}]", mbmber));
+		List<MemberModel> memberList = companyRepository.getCompanyAllMembers("J01");
+		memberList.forEach(mbmber -> log.info(mbmber.toString()));
 	}
 
 	@Test
