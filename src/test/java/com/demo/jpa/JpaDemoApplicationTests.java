@@ -52,13 +52,14 @@ class JpaDemoApplicationTests {
 	@Autowired
 	MemberRepository memberRepository;
 
-	@PersistenceContext
-	EntityManager em;
-
-	@Test
-	void contextLoads() {
-	}
-
+	/**
+	 * 고객사, 회원 테스트 정보 생성
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 * @author chanwj
+	 */
 	@Test
 	public void setData() {
 		CompanyBaseEntity cmpy100 = new CompanyBaseEntity("100","이제너두");
