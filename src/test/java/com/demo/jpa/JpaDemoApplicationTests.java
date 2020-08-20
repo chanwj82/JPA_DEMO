@@ -119,6 +119,14 @@ class JpaDemoApplicationTests {
 		log.info("members.size [{}]",members.getTotalElements());
 	}
 
+	/**
+	 * 고객사 조회
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 * @author chanwj
+	 */
 	@Test
 	public void getCompanyBas(){
 		CompanyBaseEntity companyBaseEntity = companyRepository.findOneByCmpyNo("J01");
