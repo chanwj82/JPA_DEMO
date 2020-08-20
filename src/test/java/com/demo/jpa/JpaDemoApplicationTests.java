@@ -87,6 +87,14 @@ class JpaDemoApplicationTests {
 		companyRepository.saveAll(Arrays.asList(cmpy100,cmpyJ01));
 	}
 
+	/**
+	 * 고객사 전체 회원 목록 조회
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 * @author chanwj
+	 */
 	@Test
 	public void getCmpyAllMembers(){
 		List<MemberModel> memberList = companyRepository.getCompanyAllMembers("J01");
