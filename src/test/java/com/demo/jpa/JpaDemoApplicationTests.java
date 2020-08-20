@@ -52,13 +52,14 @@ class JpaDemoApplicationTests {
 	@Autowired
 	MemberRepository memberRepository;
 
-	@PersistenceContext
-	EntityManager em;
-
-	@Test
-	void contextLoads() {
-	}
-
+	/**
+	 * 고객사, 회원 테스트 정보 생성
+	 *
+	 * @param
+	 * @return
+	 * @throws
+	 * @author chanwj
+	 */
 	@Test
 	public void setData() {
 		CompanyBaseEntity cmpy100 = new CompanyBaseEntity("100","이제너두");
@@ -101,6 +102,14 @@ class JpaDemoApplicationTests {
 		memberList.forEach(mbmber -> log.info(mbmber.toString()));
 	}
 
+    /**
+     * 고객사 전체 회원 목록 조회 페이지 버전
+     *
+     * @param
+     * @return
+     * @throws
+     * @author chanwj
+     */
 	@Test
 	public void getCmpyAllMembersPage(){
 		PageRequest pageRequest = new PageRequest();
