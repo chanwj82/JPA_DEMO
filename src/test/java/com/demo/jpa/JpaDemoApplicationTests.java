@@ -16,17 +16,22 @@ import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.hibernate.jpa.QueryHints;
 import org.junit.Assert;
+import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static com.demo.jpa.entity.QCompanyBaseEntity.companyBaseEntity;
 import static com.demo.jpa.entity.QCompanySetInfoEntity.companySetInfoEntity;
@@ -57,12 +62,10 @@ class JpaDemoApplicationTests {
 	public void setData() {
 		CompanyBaseEntity cmpy100 = new CompanyBaseEntity("100","이제너두");
 		CompanyBaseEntity cmpyJ01 = new CompanyBaseEntity("J01","차세대테스트");
-
 		//companyRepository.saveAll(Arrays.asList(cmpy100,cmpyJ01));
 
 		CompanySetInfoEntity cmpySetInf100 = new CompanySetInfoEntity("10", "SMT", 30, cmpy100);
 		CompanySetInfoEntity cmpySetInfJ01 = new CompanySetInfoEntity("20", "KCP", 60, cmpyJ01);
-
 		//companySetInfRepository.saveAll(Arrays.asList(cmpySetInf100,cmpySetInfJ01));
 
 		MemberEntity mbr1 = new MemberEntity("100MBR0001", "정찬우", cmpy100);
@@ -79,104 +82,46 @@ class JpaDemoApplicationTests {
 		MemberEntity mbr12 = new MemberEntity("J01MBR0010", "테스트10", cmpyJ01);
 		MemberEntity mbr13 = new MemberEntity("J01MBR0011", "테스트11", cmpyJ01);
 		MemberEntity mbr14 = new MemberEntity("J01MBR0012", "테스트12", cmpyJ01);
-
 		//memberRepository.saveAll(Arrays.asList( mbr1, mbr2, mbr3, mbr4, mbr5, mbr6, mbr7, mbr8, mbr9, mbr10, mbr11, mbr12, mbr13, mbr14));
-
 		companyRepository.saveAll(Arrays.asList(cmpy100,cmpyJ01));
 	}
 
 	@Test
 	public void getCmpyAllMembers(){
-
-		JPAQueryFactory queryFactory = (JPAQueryFactory) SpringApplicationContext.getBean("queryFactory");
-
-		List<MemberModel> resultList = queryFactory
-				.select(
-						Projections.fields(MemberModel.class
-								, memberEntity.mbrNo
-								, memberEntity.mbrNm
-								, companyBaseEntity.cmpyNo
-								, companyBaseEntity.cmpyNm
-								, companySetInfoEntity.huafMgmtStdCd
-								, companySetInfoEntity.pgTpCd
-								, companySetInfoEntity.foLoginVldHh
-						)
-				)
-				.setHint(QueryHints.HINT_COMMENT, ClzMethodUtil.getCurClzMethodName(new Object(){}.getClass()))
-				.from(memberEntity)
-				.join(memberEntity.company,companyBaseEntity)
-				.join(companySetInfoEntity).on(companySetInfoEntity.cmpyNo.eq(companyBaseEntity.cmpyNo))
-				.where(memberEntity.company.cmpyNo.in("100","J01"))
-				.orderBy(memberEntity.company.cmpyNo.asc(), memberEntity.mbrNm.desc())
-				//.limit(3)
-				//.offset(4)
-				.fetch();
-
-		log.info("resultList.size() = {}",resultList.size());
-		//IntStream.range(0,resultList.size()).forEach(index -> log.info("[{}] [{}]", index+1, resultList.get(index)));
-		resultList.forEach(result -> log.info("[{}]",result));
-
-		Assert.assertEquals(resultList.size(),14);
-		Assert.assertTrue(resultList.size() == 14);
+		List<MemberModel> memberList = companyRepository.getCompanyAllMembers("100");
+		memberList.forEach(mbmber -> log.info("[{}]", mbmber));
 	}
 
 	@Test
 	public void getCmpyAllMembersPage(){
-		JPAQueryFactory queryFactory = (JPAQueryFactory) SpringApplicationContext.getBean("queryFactory");
-
 		PageRequest pageRequest = new PageRequest();
 		pageRequest.setSize(5);
-		pageRequest.setPage(2);
-
-		QueryResults<MemberModel> resultList = queryFactory
-				.select(
-						Projections.fields(MemberModel.class
-								, memberEntity.mbrNo
-								, memberEntity.mbrNm
-								, companyBaseEntity.cmpyNo
-								, companyBaseEntity.cmpyNm
-								, companySetInfoEntity.huafMgmtStdCd
-								, companySetInfoEntity.pgTpCd
-								, companySetInfoEntity.foLoginVldHh
-						)
-				)
-				.setHint(QueryHints.HINT_COMMENT, ClzMethodUtil.getCurClzMethodName(new Object(){}.getClass()))
-				.from(memberEntity)
-				.join(memberEntity.company,companyBaseEntity)
-				.join(companySetInfoEntity).on(companySetInfoEntity.cmpyNo.eq(companyBaseEntity.cmpyNo))
-				.where(memberEntity.company.cmpyNo.in("100","J01"))
-				.orderBy(memberEntity.company.cmpyNo.asc(), memberEntity.mbrNm.desc())
-				.limit(pageRequest.of().getPageSize())
-				.offset(pageRequest.of().getOffset())
-				.fetchResults();
-
-		resultList.getResults().forEach(member -> log.info("{}",member));
-
+		pageRequest.setPage(1);
+		Page<MemberModel> members = companyRepository.getCompanyAllMembersPage("J01",pageRequest.of());
+		log.info("members.size [{}]",members.getTotalElements());
 	}
 
 	@Test
 	public void getCompanyBas(){
-
 		CompanyBaseEntity companyBaseEntity = companyRepository.findOneByCmpyNo("J01");
-		
 		Assert.assertTrue(companyBaseEntity.getCmpyNm().equals("차세대테스트"));
-
 		log.info("companyBaseEntity [{}] CompanySetInfo [{}]", companyBaseEntity, companyBaseEntity.getCompanySetInfo());
 
 		CompanyModel companyBase = companyRepository.getCompany("100");
-
 		log.info("companyBase [{}]", companyBase);
-
 		Assert.assertTrue(companyBase.getCmpyNm().equals("이제너두"));
 	}
 
 	@Test
 	public void getCompanySetInf(){
-
 		CompanySetInfoEntity companySetInfoEntity = companySetInfRepository.findByCmpyNo("J01");
-
 		log.info("companySetInfoEntity [{}] Company [{}]", companySetInfoEntity, companySetInfoEntity.getCompany());
-
 		Assert.assertTrue(companySetInfoEntity.getCmpyNo().equals("J01"));
+	}
+
+	@Test
+	public void getMemberByMbrNo() {
+		MemberModel member = memberRepository.getMemberByMbrNo("100MBR0001");
+		log.info("[{}]",member);
 	}
 }

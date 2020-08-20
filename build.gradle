@@ -21,7 +21,7 @@ repositories {
 	mavenCentral()
 	maven { url 'https://repo.spring.io/milestone' }
 	maven { url 'https://repo.spring.io/snapshot' }
-	maven { url 'http://192.168.237.6:9090/content/groups/exanadu' }
+	//maven { url 'http://192.168.237.6:9090/content/groups/exanadu' }
 }
 
 dependencies {
@@ -41,7 +41,7 @@ dependencies {
 	implementation 'org.codehaus.janino:janino'
 	compile 'org.bgee.log4jdbc-log4j2:log4jdbc-log4j2-jdbc4.1:1.16'
 	implementation 'org.mariadb.jdbc:mariadb-java-client'
-	runtime 'com.oracle:ojdbc6:11.2.0.4.0'
+	//runtime 'com.oracle:ojdbc6:11.2.0.4.0'
 	implementation 'eu.bitwalker:UserAgentUtils:1.21'
 	testImplementation 'junit:junit:4.13'
 }
