@@ -102,6 +102,14 @@ class JpaDemoApplicationTests {
 		memberList.forEach(mbmber -> log.info(mbmber.toString()));
 	}
 
+    /**
+     * 고객사 전체 회원 목록 조회 페이지 버전
+     *
+     * @param
+     * @return
+     * @throws
+     * @author chanwj
+     */
 	@Test
 	public void getCmpyAllMembersPage(){
 		PageRequest pageRequest = new PageRequest();
