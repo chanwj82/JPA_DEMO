@@ -1,13 +1,14 @@
 package com.demo.jpa.model;
 
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
 @Data
-@NoArgsConstructor
-@ToString(of = {"cmpyNm","mbrNm","huafMgmtStdCd","pgTpCd","foLoginVldHh"})
+@Getter
+@Setter
+@AllArgsConstructor @NoArgsConstructor
+@Builder
+//@ToString(of = {"cmpyNm","mbrNm","huafMgmtStdCd","pgTpCd","foLoginVldHh"})
 public class MemberModel {
 	private String cmpyNo;
 	private String cmpyNm;
