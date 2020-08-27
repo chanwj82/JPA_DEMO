@@ -1,6 +1,5 @@
 package com.demo.jpa.repository.impl;
 
-import com.demo.jpa.core.SpringApplicationContext;
 import com.demo.jpa.model.CompanyModel;
 import com.demo.jpa.model.MemberModel;
 import com.demo.jpa.repository.CompanyRepositoryCustom;
@@ -15,28 +14,27 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Repository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
+import javax.annotation.Resource;
 import java.util.List;
 
 import static com.demo.jpa.entity.QCompanyBaseEntity.companyBaseEntity;
 import static com.demo.jpa.entity.QCompanySetInfoEntity.companySetInfoEntity;
 import static com.demo.jpa.entity.QMemberEntity.memberEntity;
 
+@RequiredArgsConstructor
 public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 
     public static Logger log = LoggerFactory.getLogger(CompanyRepositoryImpl.class);
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public CompanyModel getCompany(String cmpyNo) {
 
-        CompanyModel company = new JPAQueryFactory(entityManager)
-                .select(
+        CompanyModel company =
+                queryFactory.select(
                         Projections.fields(CompanyModel.class
                                 , companyBaseEntity.cmpyNo
                                 , companyBaseEntity.cmpyNm
@@ -73,8 +71,8 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
     @Override
     public List<MemberModel> getCompanyAllMembers(String cmpyNo) {
 
-        List<MemberModel> members = new JPAQueryFactory(entityManager)
-                .select(
+        List<MemberModel> members =
+                queryFactory.select(
                         Projections.fields(MemberModel.class
                                 , memberEntity.mbrNo
                                 , memberEntity.mbrNm
@@ -102,8 +100,8 @@ public class CompanyRepositoryImpl implements CompanyRepositoryCustom {
 
         log.info("pageable.getOffset() [{}], pageable.getPageSize() [{}]",pageable.getOffset(),pageable.getPageSize());
 
-        QueryResults<MemberModel> members = new JPAQueryFactory(entityManager)
-                .select(
+        QueryResults<MemberModel> members =
+                queryFactory.select(
                         Projections.fields(MemberModel.class
                                 , memberEntity.mbrNo
                                 , memberEntity.mbrNm

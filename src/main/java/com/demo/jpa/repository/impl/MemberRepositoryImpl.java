@@ -5,7 +5,10 @@ import com.demo.jpa.repository.MemberRepositoryCustom;
 import com.demo.jpa.utils.ClzMethodUtil;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import javax.annotation.Resource;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -13,15 +16,16 @@ import static com.demo.jpa.entity.QCompanyBaseEntity.companyBaseEntity;
 import static com.demo.jpa.entity.QCompanySetInfoEntity.companySetInfoEntity;
 import static com.demo.jpa.entity.QMemberEntity.memberEntity;
 
+@RequiredArgsConstructor
 public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Autowired
+    private final JPAQueryFactory queryFactory;
 
     @Override
     public MemberModel getMemberByMbrNo(String mbrNo) {
-        MemberModel member = new JPAQueryFactory(entityManager)
-                .select(Projections.fields(MemberModel.class
+        MemberModel member =
+                queryFactory.select(Projections.fields(MemberModel.class
                         , memberEntity.mbrNo
                         , memberEntity.mbrNm
                         , companyBaseEntity.cmpyNo
@@ -41,8 +45,8 @@ public class MemberRepositoryImpl implements MemberRepositoryCustom {
 
     @Override
     public MemberModel getMemberByMbrNm(String cmpyNo, String mbrNm) {
-        MemberModel member = new JPAQueryFactory(entityManager)
-                .select(Projections.fields(MemberModel.class
+        MemberModel member =
+                queryFactory.select(Projections.fields(MemberModel.class
                         , memberEntity.mbrNo
                         , memberEntity.mbrNm
                         , companyBaseEntity.cmpyNo
