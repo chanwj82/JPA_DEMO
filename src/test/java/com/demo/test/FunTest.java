@@ -79,4 +79,9 @@ class FunTest {
         System.out.println("---------------------------------");
     }
 
+    @Test
+    public void test() {
+        System.out.println("develop branch test code..");
+    }
+
 }
